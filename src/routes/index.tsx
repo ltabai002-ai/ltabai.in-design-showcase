@@ -23,6 +23,8 @@ import {
   Users,
   Layers,
   ChevronRight,
+  Newspaper,
+  Calendar,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -202,6 +204,36 @@ const benefits = [
 ];
 
 const brands = ["TVS Motor", "TATA Motors", "German Motors", "Yamaha", "Royal Enfield", "Honda"];
+
+const blogPosts = [
+  {
+    date: "Jun 15, 2026",
+    tag: "AI Video",
+    title: "How AI Avatars Are Transforming Video Production for Small Businesses",
+    excerpt: "Learn how AI avatar technology is making professional video content accessible to businesses of all sizes — no studio, no actors, no expensive equipment required.",
+    slug: "ai-avatars-transforming-video-production",
+    author: "LTAB Team",
+    readTime: "5 min read",
+  },
+  {
+    date: "May 28, 2026",
+    tag: "Social Media",
+    title: "The Complete Guide to Social Media Automation in 2026",
+    excerpt: "From scheduling to AI-powered replies, discover how automation can cut your social media workload by 60% while boosting engagement.",
+    slug: "complete-guide-social-media-automation-2026",
+    author: "LTAB Team",
+    readTime: "8 min read",
+  },
+  {
+    date: "May 10, 2026",
+    tag: "Websites",
+    title: "Why Your Business Needs an AI-Powered Website (Not Just a Static One)",
+    excerpt: "Static websites are a thing of the past. See how AI-powered sites adapt to visitors, capture leads automatically, and drive conversions while you sleep.",
+    slug: "why-your-business-needs-ai-powered-website",
+    author: "LTAB Team",
+    readTime: "6 min read",
+  },
+];
 
 const testimonials = [
   {
@@ -652,6 +684,70 @@ function Index() {
               </StaggerItem>
             ))}
           </StaggerFade>
+        </div>
+      </section>
+
+      {/* ─────────── BLOG / PRESS RELEASE ─────────── */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 gradient-section-alt pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+        <div className="relative mx-auto max-w-7xl px-6">
+          <FadeUp className="text-center max-w-xl mx-auto">
+            <SectionTag>Press Release</SectionTag>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+              Latest from LTAB
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Insights, guides, and announcements from our team.
+            </p>
+          </FadeUp>
+
+          <StaggerFade className="mt-14 grid md:grid-cols-3 gap-6">
+            {blogPosts.map((post) => (
+              <StaggerItem key={post.slug}>
+                <Link
+                  to="/blog"
+                  className="group block h-full bg-white rounded-3xl p-6 shadow-card hover:shadow-premium-xl transition-all duration-500 border border-[#f0ede6] hover:border-primary/20"
+                >
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {post.date}
+                    </span>
+                    <span className="w-1 h-1 rounded-full bg-[#e5e1d9]" />
+                    <span>{post.readTime}</span>
+                  </div>
+
+                  <span className="inline-block text-[10px] font-semibold tracking-wider uppercase text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
+                    {post.tag}
+                  </span>
+
+                  <h3 className="font-display font-bold text-lg text-ink group-hover:text-primary transition-colors duration-300 leading-snug">
+                    {post.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                    {post.excerpt}
+                  </p>
+
+                  <div className="mt-6 pt-4 border-t border-[#f0ede6] flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all duration-300">
+                    Read More <ChevronRight className="h-4 w-4" />
+                  </div>
+                </Link>
+              </StaggerItem>
+            ))}
+          </StaggerFade>
+
+          <FadeUp delay={0.5} className="mt-12 text-center">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 bg-ink text-on-ink px-7 h-13 rounded-full font-semibold hover:bg-ink/90 transition-all shadow-premium-lg group"
+            >
+              View all articles
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </FadeUp>
         </div>
       </section>
 

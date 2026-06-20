@@ -6,6 +6,7 @@ const nav = [
   { label: "Services", to: "/services" },
   { label: "AI Gallery", to: "/ai-gallery" },
   { label: "Websites", to: "/website-gallery" },
+  { label: "Press Release", to: "/blog" },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];

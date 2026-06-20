@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WebsiteGalleryRouteImport } from './routes/website-gallery'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AiGalleryRouteImport } from './routes/ai-gallery'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,6 +29,11 @@ const WebsiteGalleryRoute = WebsiteGalleryRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiGalleryRoute = AiGalleryRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai-gallery': typeof AiGalleryRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/website-gallery': typeof WebsiteGalleryRoute
   '/services/ai-ops': typeof ServicesAiOpsRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai-gallery': typeof AiGalleryRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/website-gallery': typeof WebsiteGalleryRoute
   '/services/ai-ops': typeof ServicesAiOpsRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai-gallery': typeof AiGalleryRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/website-gallery': typeof WebsiteGalleryRoute
   '/services/ai-ops': typeof ServicesAiOpsRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/ai-gallery'
+    | '/blog'
     | '/contact'
     | '/website-gallery'
     | '/services/ai-ops'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/ai-gallery'
+    | '/blog'
     | '/contact'
     | '/website-gallery'
     | '/services/ai-ops'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/ai-gallery'
+    | '/blog'
     | '/contact'
     | '/website-gallery'
     | '/services/ai-ops'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AiGalleryRoute: typeof AiGalleryRoute
+  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   WebsiteGalleryRoute: typeof WebsiteGalleryRoute
   ServicesAiOpsRoute: typeof ServicesAiOpsRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai-gallery': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AiGalleryRoute: AiGalleryRoute,
+  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   WebsiteGalleryRoute: WebsiteGalleryRoute,
   ServicesAiOpsRoute: ServicesAiOpsRoute,

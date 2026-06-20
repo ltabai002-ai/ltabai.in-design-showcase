@@ -9,38 +9,188 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WebsiteGalleryRouteImport } from './routes/website-gallery'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AiGalleryRouteImport } from './routes/ai-gallery'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ServicesIndexRouteImport } from './routes/services/index'
+import { Route as ServicesSocialAutomationRouteImport } from './routes/services/social-automation'
+import { Route as ServicesAiWebsitesRouteImport } from './routes/services/ai-websites'
+import { Route as ServicesAiVideosRouteImport } from './routes/services/ai-videos'
+import { Route as ServicesAiOpsRouteImport } from './routes/services/ai-ops'
 
+const WebsiteGalleryRoute = WebsiteGalleryRouteImport.update({
+  id: '/website-gallery',
+  path: '/website-gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiGalleryRoute = AiGalleryRouteImport.update({
+  id: '/ai-gallery',
+  path: '/ai-gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesSocialAutomationRoute =
+  ServicesSocialAutomationRouteImport.update({
+    id: '/services/social-automation',
+    path: '/services/social-automation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ServicesAiWebsitesRoute = ServicesAiWebsitesRouteImport.update({
+  id: '/services/ai-websites',
+  path: '/services/ai-websites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesAiVideosRoute = ServicesAiVideosRouteImport.update({
+  id: '/services/ai-videos',
+  path: '/services/ai-videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesAiOpsRoute = ServicesAiOpsRouteImport.update({
+  id: '/services/ai-ops',
+  path: '/services/ai-ops',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-gallery': typeof AiGalleryRoute
+  '/contact': typeof ContactRoute
+  '/website-gallery': typeof WebsiteGalleryRoute
+  '/services/ai-ops': typeof ServicesAiOpsRoute
+  '/services/ai-videos': typeof ServicesAiVideosRoute
+  '/services/ai-websites': typeof ServicesAiWebsitesRoute
+  '/services/social-automation': typeof ServicesSocialAutomationRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-gallery': typeof AiGalleryRoute
+  '/contact': typeof ContactRoute
+  '/website-gallery': typeof WebsiteGalleryRoute
+  '/services/ai-ops': typeof ServicesAiOpsRoute
+  '/services/ai-videos': typeof ServicesAiVideosRoute
+  '/services/ai-websites': typeof ServicesAiWebsitesRoute
+  '/services/social-automation': typeof ServicesSocialAutomationRoute
+  '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-gallery': typeof AiGalleryRoute
+  '/contact': typeof ContactRoute
+  '/website-gallery': typeof WebsiteGalleryRoute
+  '/services/ai-ops': typeof ServicesAiOpsRoute
+  '/services/ai-videos': typeof ServicesAiVideosRoute
+  '/services/ai-websites': typeof ServicesAiWebsitesRoute
+  '/services/social-automation': typeof ServicesSocialAutomationRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/ai-gallery'
+    | '/contact'
+    | '/website-gallery'
+    | '/services/ai-ops'
+    | '/services/ai-videos'
+    | '/services/ai-websites'
+    | '/services/social-automation'
+    | '/services/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/ai-gallery'
+    | '/contact'
+    | '/website-gallery'
+    | '/services/ai-ops'
+    | '/services/ai-videos'
+    | '/services/ai-websites'
+    | '/services/social-automation'
+    | '/services'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/ai-gallery'
+    | '/contact'
+    | '/website-gallery'
+    | '/services/ai-ops'
+    | '/services/ai-videos'
+    | '/services/ai-websites'
+    | '/services/social-automation'
+    | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AiGalleryRoute: typeof AiGalleryRoute
+  ContactRoute: typeof ContactRoute
+  WebsiteGalleryRoute: typeof WebsiteGalleryRoute
+  ServicesAiOpsRoute: typeof ServicesAiOpsRoute
+  ServicesAiVideosRoute: typeof ServicesAiVideosRoute
+  ServicesAiWebsitesRoute: typeof ServicesAiWebsitesRoute
+  ServicesSocialAutomationRoute: typeof ServicesSocialAutomationRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/website-gallery': {
+      id: '/website-gallery'
+      path: '/website-gallery'
+      fullPath: '/website-gallery'
+      preLoaderRoute: typeof WebsiteGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-gallery': {
+      id: '/ai-gallery'
+      path: '/ai-gallery'
+      fullPath: '/ai-gallery'
+      preLoaderRoute: typeof AiGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +198,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/social-automation': {
+      id: '/services/social-automation'
+      path: '/services/social-automation'
+      fullPath: '/services/social-automation'
+      preLoaderRoute: typeof ServicesSocialAutomationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/ai-websites': {
+      id: '/services/ai-websites'
+      path: '/services/ai-websites'
+      fullPath: '/services/ai-websites'
+      preLoaderRoute: typeof ServicesAiWebsitesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/ai-videos': {
+      id: '/services/ai-videos'
+      path: '/services/ai-videos'
+      fullPath: '/services/ai-videos'
+      preLoaderRoute: typeof ServicesAiVideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/ai-ops': {
+      id: '/services/ai-ops'
+      path: '/services/ai-ops'
+      fullPath: '/services/ai-ops'
+      preLoaderRoute: typeof ServicesAiOpsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AiGalleryRoute: AiGalleryRoute,
+  ContactRoute: ContactRoute,
+  WebsiteGalleryRoute: WebsiteGalleryRoute,
+  ServicesAiOpsRoute: ServicesAiOpsRoute,
+  ServicesAiVideosRoute: ServicesAiVideosRoute,
+  ServicesAiWebsitesRoute: ServicesAiWebsitesRoute,
+  ServicesSocialAutomationRoute: ServicesSocialAutomationRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

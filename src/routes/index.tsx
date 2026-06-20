@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useRef, type ReactNode } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion, useInView } from "framer-motion";
 import heroPerson from "@/assets/hero-person.jpg";
 import teamMeeting from "@/assets/team-meeting.jpg";
 import whyChoose from "@/assets/why-choose.jpg";
@@ -11,21 +13,30 @@ import {
   Cpu,
   CheckCircle2,
   Play,
-  Sun,
-  Menu,
-  Search,
+  Star,
+  Zap,
+  BarChart3,
+  MessageCircle,
+  Shield,
+  Clock,
+  TrendingUp,
+  Users,
+  Layers,
+  ChevronRight,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "LTAB AI — Wake up. Your business is already live." },
+      {
+        title: "LTAB — AI Growth Studio. Wake up. Your business is already live.",
+      },
       {
         name: "description",
         content:
           "AI avatar videos, social media automation, AI-powered websites and custom AI software that runs your operations.",
       },
-      { property: "og:title", content: "LTAB AI — AI Growth Studio" },
+      { property: "og:title", content: "LTAB — AI Growth Studio" },
       {
         property: "og:description",
         content:
@@ -36,306 +47,668 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const nav = ["Home", "Services", "AI Gallery", "Websites", "About", "Contact"];
+/* ─── Animation helpers ─── */
+function FadeUp({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{
+        duration: 0.7,
+        delay,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function StaggerFade({ children, className = "" }: { children: ReactNode; className?: string }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      variants={{
+        visible: { transition: { staggerChildren: 0.12 } },
+        hidden: {},
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function StaggerItem({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <motion.div
+      variants={{
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
+        },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function SectionTag({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.15em] uppercase text-primary bg-primary/10 px-4 py-1.5 rounded-full">
+      <Sparkles className="h-3 w-3" />
+      {children}
+    </span>
+  );
+}
+
+/* ─── Data ─── */
+const services = [
+  {
+    icon: Video,
+    title: "AI Video Ads",
+    desc: "No shoots. No delays. On-brand AI avatar video ads delivered in days, not weeks.",
+    features: ["AI avatar spokespersons", "Multi-language support", "Weekly content cadence"],
+    to: "/services/ai-videos",
+  },
+  {
+    icon: Share2,
+    title: "Social Automation",
+    desc: "Auto-posting, trend mining, smart replies — your entire social presence on autopilot.",
+    features: ["Cross-platform scheduling", "AI-powered replies", "Performance analytics"],
+    to: "/services/social-automation",
+  },
+  {
+    icon: Globe,
+    title: "AI Websites",
+    desc: "Fast, secure, Google-optimized sites engineered to turn searches into booked calls.",
+    features: ["SEO-first architecture", "Lead capture built-in", "Lightning-fast load"],
+    to: "/services/ai-websites",
+  },
+  {
+    icon: Cpu,
+    title: "Custom AI Ops",
+    desc: "Workflows, dashboards, and internal tools that streamline every operation.",
+    features: ["Lead routing automation", "Real-time dashboards", "Legacy integrations"],
+    to: "/services/ai-ops",
+  },
+];
+
+const process = [
+  {
+    step: "01",
+    title: "Audit & Strategy",
+    desc: "We map your current funnel, identify the highest-leverage automation points, and build a custom roadmap.",
+  },
+  {
+    step: "02",
+    title: "Create & Configure",
+    desc: "Our team builds your AI assets — avatar videos, automations, dashboards — and integrates them into your stack.",
+  },
+  {
+    step: "03",
+    title: "Launch & Optimize",
+    desc: "We go live, monitor performance, and continuously optimize based on real data and conversions.",
+  },
+];
 
 const stats = [
-  { value: "3×", label: "Content output" },
-  { value: "−60%", label: "Response time" },
-  { value: "+45%", label: "Qualified leads" },
-];
-
-const steps = [
-  { n: "01", title: "Make", desc: "We script & produce AI avatar videos and ad creatives." },
-  { n: "02", title: "Move", desc: "We schedule & auto-post, reply to customers, and track performance." },
-  { n: "03", title: "Manage", desc: "We build AI tools to organize data, automate tasks, and keep ops smooth." },
-];
-
-const services = [
-  { icon: Video, title: "AI Video Ads", desc: "No shoots. No delays. On-brand video ads in days." },
-  { icon: Share2, title: "Social Automation", desc: "Auto-posting, trend mining, smart replies, inbox zero." },
-  { icon: Globe, title: "AI Powered Websites", desc: "Fast, secure, Google-ready sites that turn searches into leads." },
-  { icon: Cpu, title: "Custom AI Software", desc: "Workflows, dashboards, and internal mini-apps." },
+  { value: "3×", label: "Content output", icon: Zap },
+  { value: "-60%", label: "Response time", icon: Clock },
+  { value: "+45%", label: "Qualified leads", icon: TrendingUp },
 ];
 
 const benefits = [
-  { title: "More Qualified Leads", desc: "AI-powered content and smart automation bring the right customers to your door." },
-  { title: "Faster Replies, Happier Customers", desc: "Instant responses and smart routing mean no customer waits, no leads slip through." },
-  { title: "Lower Content Costs", desc: "AI avatars and automated workflows deliver professional content at a fraction of the cost." },
-  { title: "Clear Dashboards", desc: "Real-time data and automated reports show exactly what's working and what isn't." },
+  {
+    icon: Users,
+    title: "Dedicated Team",
+    desc: "Direct access to your growth strategist, content team, and technical lead.",
+  },
+  {
+    icon: BarChart3,
+    title: "Transparent Reporting",
+    desc: "Real-time dashboard showing every metric that matters to your bottom line.",
+  },
+  {
+    icon: Shield,
+    title: "Brand-Safe AI",
+    desc: "Human-in-the-loop oversight. Every piece of content is reviewed before going live.",
+  },
+  {
+    icon: Layers,
+    title: "Scalable Systems",
+    desc: "From 1 channel to 10 — our infrastructure grows with your business.",
+  },
+];
+
+const brands = ["TVS Motor", "TATA Motors", "German Motors", "Yamaha", "Royal Enfield", "Honda"];
+
+const testimonials = [
+  {
+    quote:
+      "LTAB transformed our content pipeline. We went from struggling to post weekly to publishing daily — with better engagement.",
+    name: "— Operations Head",
+    company: "Leading Automotive Group",
+  },
+  {
+    quote:
+      "The AI avatar videos look incredibly natural. Our customers can't tell the difference. Cost savings have been massive.",
+    name: "— Marketing Director",
+    company: "Premium Dealership Network",
+  },
 ];
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background text-foreground font-body">
-      {/* NAV */}
-      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur border-b border-border">
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2 font-display font-extrabold text-xl">
-            <span className="inline-block h-8 w-8 rounded-md bg-primary grid place-items-center text-ink">
-              <Sparkles className="h-4 w-4" />
-            </span>
-            LTAB<span className="text-primary">.</span>AI
-          </a>
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-            {nav.map((n) => (
-              <a key={n} href="#" className="hover:text-primary transition-colors">
-                {n}
-              </a>
-            ))}
-          </nav>
-          <div className="flex items-center gap-3">
-            <button className="hidden md:grid place-items-center h-9 w-9 rounded-full border border-border hover:border-primary">
-              <Search className="h-4 w-4" />
-            </button>
-            <a
-              href="#contact"
-              className="hidden md:inline-flex items-center gap-2 bg-primary text-ink px-4 h-9 rounded-md font-semibold text-sm hover:brightness-95"
-            >
-              Book a Demo <ArrowRight className="h-4 w-4" />
-            </a>
-            <button className="md:hidden grid place-items-center h-9 w-9 rounded-md border border-border">
-              <Menu className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      </header>
+    <>
+      {/* ─────────── HERO ─────────── */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        <div className="absolute inset-0 gradient-glow pointer-events-none" />
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute -top-10 left-0 h-[120%] w-[55%] bg-primary clip-tilt opacity-90" />
-          <div className="absolute top-10 right-10 h-40 w-40 diagonal-stripe opacity-20 rounded-full" />
-        </div>
-        <div className="mx-auto max-w-7xl px-6 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-ink/70 bg-background/60 px-3 py-1 rounded-full mb-6">
-              <Sun className="h-3 w-3" /> AI Growth Studio
-            </p>
-            <h1 className="text-5xl md:text-6xl font-extrabold leading-[1.05] text-ink">
-              Wake up. Your <br />
-              business is <span className="underline decoration-ink decoration-4 underline-offset-4">already live.</span>
-            </h1>
-            <p className="mt-6 text-ink/80 max-w-md text-base leading-relaxed">
-              We create your videos with AI avatars, automate social posting & replies, and build AI
-              tools that run your operations.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 bg-ink text-on-ink px-6 h-12 rounded-md font-semibold hover:bg-ink/90"
-              >
-                Book a Demo <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#how"
-                className="inline-flex items-center gap-2 bg-background text-ink border border-ink/20 px-6 h-12 rounded-md font-semibold hover:border-ink"
-              >
-                <Play className="h-4 w-4" /> Watch how it works
-              </a>
+        <div className="relative mx-auto max-w-7xl px-6 py-20 md:py-0 w-full">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            {/* Left content */}
+            <div className="relative z-10 pt-12 lg:pt-0">
+              <FadeUp>
+                <SectionTag>AI Growth Studio</SectionTag>
+              </FadeUp>
+
+              <FadeUp delay={0.15}>
+                <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] text-ink">
+                  Wake up. Your&nbsp;business is{" "}
+                  <span className="text-gradient">already live.</span>
+                </h1>
+              </FadeUp>
+
+              <FadeUp delay={0.3}>
+                <p className="mt-6 text-lg text-muted-foreground max-w-lg leading-relaxed">
+                  We create your videos with AI avatars, automate social posting & replies, and
+                  build AI tools that run your operations — so you wake up to growth, not chaos.
+                </p>
+              </FadeUp>
+
+              <FadeUp delay={0.45}>
+                <div className="mt-10 flex flex-wrap gap-4">
+                  <Link
+                    to="/contact"
+                    className="group relative inline-flex items-center gap-2 bg-ink text-on-ink px-8 h-14 rounded-full font-semibold text-base hover:bg-ink/90 transition-all shadow-premium-lg"
+                  >
+                    Book a Free Demo
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                  <a
+                    href="#how"
+                    className="inline-flex items-center gap-2.5 bg-white text-ink border border-[#e5e1d9] px-8 h-14 rounded-full font-semibold text-base shadow-premium hover:shadow-premium-lg hover:border-primary/30 transition-all"
+                  >
+                    <span className="flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 text-primary">
+                      <Play className="h-3.5 w-3.5 fill-primary" />
+                    </span>
+                    Watch how it works
+                  </a>
+                </div>
+              </FadeUp>
+
+              {/* Trust indicators */}
+              <FadeUp delay={0.6}>
+                <div className="mt-12 flex items-center gap-3">
+                  <div className="flex -space-x-2">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div
+                        key={i}
+                        className="h-8 w-8 rounded-full bg-[#e5e1d9] border-2 border-white flex items-center justify-center text-[10px] font-bold text-muted-foreground"
+                      >
+                        {String.fromCharCode(64 + i)}
+                      </div>
+                    ))}
+                    <div className="h-8 w-8 rounded-full bg-primary/20 border-2 border-white flex items-center justify-center text-[10px] font-bold text-primary">
+                      +
+                    </div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-ink">50+</span> businesses trust us
+                  </div>
+                </div>
+              </FadeUp>
             </div>
-          </div>
-          <div className="relative">
-            <div className="absolute -inset-4 bg-ink rounded-2xl -rotate-2" />
-            <img
-              src={heroPerson}
-              alt="AI Growth Studio"
-              width={1024}
-              height={1024}
-              className="relative rounded-2xl shadow-2xl object-cover aspect-square"
-            />
-            <div className="absolute -bottom-6 -left-6 bg-background border border-border rounded-xl p-4 shadow-xl hidden sm:block">
-              <div className="text-xs text-muted-foreground">Avg. delivery</div>
-              <div className="font-display font-bold text-2xl text-ink">3 days</div>
+
+            {/* Right visual */}
+            <div className="relative">
+              <FadeUp delay={0.2}>
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-br from-primary/30 via-primary/10 to-transparent rounded-[32px] blur-sm" />
+                  <div className="relative rounded-[24px] overflow-hidden shadow-premium-xl">
+                    <img
+                      src={heroPerson}
+                      alt="LTAB AI Growth Studio"
+                      width={800}
+                      height={800}
+                      className="w-full aspect-[4/5] object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  </div>
+
+                  {/* Floating stat card 1 */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.8,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
+                    className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 bg-white/80 backdrop-blur-xl rounded-2xl p-4 sm:p-5 shadow-premium-lg border border-white/40 min-w-[160px]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center">
+                        <Zap className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-extrabold text-ink">3 days</div>
+                        <div className="text-xs text-muted-foreground">Avg. delivery time</div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Floating stat card 2 */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 1.0,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
+                    className="absolute -top-4 -right-4 sm:-top-6 sm:-right-6 bg-white/80 backdrop-blur-xl rounded-2xl p-4 sm:p-5 shadow-premium-lg border border-white/40 min-w-[160px]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center">
+                        <Star className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-extrabold text-ink">4.9★</div>
+                        <div className="text-xs text-muted-foreground">Client satisfaction</div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+              </FadeUp>
             </div>
           </div>
         </div>
       </section>
 
-      {/* TRUST + STATS BAND */}
-      <section className="bg-ink text-on-ink">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <p className="text-center text-on-ink/60 text-xs tracking-[0.3em] uppercase">
-            Worked with leading brands
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-on-ink/80 font-display font-bold text-xl">
-            <span>TVS Motor</span>
-            <span className="opacity-40">•</span>
-            <span>TATA Motors</span>
-            <span className="opacity-40">•</span>
-            <span>German Motors</span>
-            <span className="opacity-40">•</span>
-            <span>Yamaha</span>
-          </div>
-          <div className="mt-12 grid sm:grid-cols-3 gap-6">
+      {/* ─────────── TRUST BAR ─────────── */}
+      <section className="relative py-16 md:py-20">
+        <div className="absolute inset-0 gradient-section pointer-events-none" />
+        <div className="relative mx-auto max-w-7xl px-6">
+          <FadeUp>
+            <p className="text-center text-muted-foreground text-xs tracking-[0.2em] uppercase font-semibold">
+              Trusted by leading brands
+            </p>
+          </FadeUp>
+
+          <FadeUp delay={0.15}>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-14 gap-y-4">
+              {brands.map((brand) => (
+                <span
+                  key={brand}
+                  className="text-muted-foreground/60 font-display font-bold text-xl md:text-2xl hover:text-ink/40 transition-colors duration-300"
+                >
+                  {brand}
+                </span>
+              ))}
+            </div>
+          </FadeUp>
+
+          <StaggerFade className="mt-14 grid sm:grid-cols-3 gap-5 max-w-3xl mx-auto">
             {stats.map((s) => (
-              <div key={s.label} className="bg-background text-ink rounded-xl p-6 text-center border-b-4 border-primary">
-                <div className="font-display font-extrabold text-4xl">{s.value}</div>
-                <div className="mt-1 text-sm text-muted-foreground">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section id="how" className="py-24">
-        <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-16 items-center">
-          <div className="relative">
-            <img
-              src={teamMeeting}
-              alt="Team collaborating"
-              loading="lazy"
-              width={1024}
-              height={1024}
-              className="rounded-2xl object-cover aspect-[4/5]"
-            />
-            <div className="absolute -bottom-6 -right-6 bg-ink text-on-ink rounded-full h-24 w-24 grid place-items-center font-display font-bold text-sm text-center leading-tight shadow-xl">
-              Trusted<br />Process
-            </div>
-            <div className="absolute -top-6 -left-6 h-16 w-16 rounded-full bg-primary grid place-items-center">
-              <Sparkles className="h-7 w-7 text-ink" />
-            </div>
-          </div>
-          <div>
-            <p className="text-xs tracking-[0.3em] uppercase text-primary font-bold">How it works</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-extrabold text-ink">
-              Three simple steps to automated growth
-            </h2>
-            <p className="mt-4 text-muted-foreground max-w-lg">
-              From scripting to scheduling to scaling — we handle the entire pipeline so you can
-              focus on what matters: your business.
-            </p>
-            <div className="mt-10 space-y-6">
-              {steps.map((s) => (
-                <div key={s.n} className="flex gap-5 items-start">
-                  <div className="shrink-0 h-12 w-12 rounded-md bg-primary text-ink font-display font-extrabold grid place-items-center">
-                    {s.n}
+              <StaggerItem key={s.label}>
+                <div className="relative bg-white rounded-2xl p-6 text-center shadow-card border border-[#f0ede6] hover:shadow-premium-lg transition-shadow duration-300">
+                  <div className="flex justify-center mb-3">
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <s.icon className="h-6 w-6 text-primary" />
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-display font-bold text-xl text-ink">{s.title}</h3>
-                    <p className="text-muted-foreground mt-1">{s.desc}</p>
+                  <div className="font-display font-extrabold text-3xl md:text-4xl text-ink">
+                    {s.value}
                   </div>
+                  <div className="mt-1 text-sm text-muted-foreground">{s.label}</div>
                 </div>
-              ))}
-            </div>
-            <a
-              href="#services"
-              className="mt-10 inline-flex items-center gap-2 bg-primary text-ink px-6 h-12 rounded-md font-semibold"
-            >
-              See the full process <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
+              </StaggerItem>
+            ))}
+          </StaggerFade>
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section id="services" className="py-24 bg-secondary">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="max-w-2xl mx-auto text-center">
-            <p className="text-xs tracking-[0.3em] uppercase text-primary font-bold">Our Services</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-extrabold text-ink">
-              Services we're providing to our customers
+      {/* ─────────── SERVICES ─────────── */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 gradient-section-alt pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+        <div className="relative mx-auto max-w-7xl px-6">
+          <FadeUp className="text-center max-w-2xl mx-auto">
+            <SectionTag>What We Build</SectionTag>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+              Services that compound your growth
             </h2>
-            <p className="mt-4 text-muted-foreground">
-              Complete AI-powered growth solutions designed to make your brand always-on.
+            <p className="mt-4 text-muted-foreground text-lg">
+              Four integrated solutions designed to work together and multiply your results.
             </p>
-          </div>
-          <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          </FadeUp>
+
+          <StaggerFade className="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {services.map((s) => (
-              <div
-                key={s.title}
-                className="group bg-ink text-on-ink rounded-xl p-6 border-b-4 border-ink hover:border-primary transition-colors"
-              >
-                <div className="h-12 w-12 rounded-md bg-primary text-ink grid place-items-center mb-6">
-                  <s.icon className="h-6 w-6" />
-                </div>
-                <h3 className="font-display font-bold text-xl">{s.title}</h3>
-                <p className="mt-2 text-on-ink/70 text-sm">{s.desc}</p>
-                <a href="#" className="mt-6 inline-flex items-center gap-1 text-primary font-semibold text-sm">
-                  Learn More <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
+              <StaggerItem key={s.title}>
+                <Link
+                  to={s.to}
+                  className="group relative block h-full bg-white rounded-3xl p-7 shadow-card hover:shadow-premium-xl transition-all duration-500 border border-[#f0ede6] hover:border-primary/20 overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors duration-300">
+                      <s.icon className="h-7 w-7 text-primary" />
+                    </div>
+
+                    <h3 className="font-display font-bold text-xl text-ink group-hover:text-primary transition-colors duration-300">
+                      {s.title}
+                    </h3>
+                    <p className="mt-2.5 text-sm text-muted-foreground leading-relaxed flex-1">
+                      {s.desc}
+                    </p>
+
+                    <ul className="mt-5 space-y-2">
+                      {s.features.map((f) => (
+                        <li
+                          key={f}
+                          className="flex items-center gap-2 text-xs text-muted-foreground"
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-6 pt-4 border-t border-[#f0ede6] flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all duration-300">
+                      Explore <ChevronRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                </Link>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerFade>
         </div>
       </section>
 
-      {/* WHY CHOOSE */}
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-16 items-center">
-          <div className="relative order-2 md:order-1">
-            <img
-              src={whyChoose}
-              alt="Customers using AI tools"
-              loading="lazy"
-              width={1024}
-              height={1024}
-              className="rounded-2xl object-cover aspect-[5/4]"
-            />
-            <div className="absolute inset-0 rounded-2xl ring-1 ring-ink/10" />
-            <div className="absolute -right-4 -bottom-4 h-24 w-24 diagonal-stripe rounded-md opacity-80" />
-          </div>
-          <div className="order-1 md:order-2">
-            <p className="text-xs tracking-[0.3em] uppercase text-primary font-bold">Why choose us</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-extrabold text-ink">
-              Why you should choose our AI technology
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              We don't just deliver content — we install a growth engine that compounds while you sleep.
-            </p>
-            <div className="mt-8 grid sm:grid-cols-2 gap-4">
-              {benefits.map((b) => (
-                <div key={b.title} className="p-5 rounded-xl bg-secondary border border-border">
-                  <CheckCircle2 className="h-5 w-5 text-primary" />
-                  <h3 className="mt-3 font-display font-bold text-ink">{b.title}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{b.desc}</p>
+      {/* ─────────── HOW IT WORKS ─────────── */}
+      <section id="how" className="relative py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 gradient-section pointer-events-none" />
+        <div className="absolute top-1/3 left-0 w-72 h-72 bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/3 right-0 w-72 h-72 bg-primary/5 rounded-full blur-[100px]" />
+
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            {/* Left - Image */}
+            <FadeUp>
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent rounded-[32px] blur-md" />
+                <div className="relative rounded-[24px] overflow-hidden shadow-premium-xl">
+                  <img
+                    src={teamMeeting}
+                    alt="LTAB team process"
+                    loading="lazy"
+                    width={1024}
+                    height={1024}
+                    className="w-full aspect-[4/5] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
                 </div>
-              ))}
+
+                <div className="absolute -bottom-4 -right-4 bg-white/80 backdrop-blur-xl rounded-2xl px-5 py-4 shadow-premium-lg border border-white/40 float">
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-bold text-ink">Trusted</span>
+                      <span className="text-muted-foreground"> Process</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Right - Content */}
+            <div>
+              <FadeUp>
+                <SectionTag>How We Work</SectionTag>
+              </FadeUp>
+
+              <FadeUp delay={0.15}>
+                <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+                  Three steps to <span className="text-gradient">automated growth.</span>
+                </h2>
+              </FadeUp>
+
+              <FadeUp delay={0.3}>
+                <p className="mt-4 text-muted-foreground max-w-lg">
+                  From strategy to execution to optimization — we build and manage the entire
+                  pipeline so you can focus on running your business.
+                </p>
+              </FadeUp>
+
+              <div className="mt-12 space-y-8">
+                {process.map((p, i) => (
+                  <FadeUp key={p.step} delay={0.35 + i * 0.15}>
+                    <div className="flex gap-5 items-start group">
+                      <div className="shrink-0 relative">
+                        <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center font-display font-extrabold text-lg text-primary group-hover:bg-primary/20 transition-colors duration-300">
+                          {p.step}
+                        </div>
+                        {i < process.length - 1 && (
+                          <div className="absolute top-14 left-1/2 -translate-x-1/2 w-px h-10 bg-[#e5e1d9]" />
+                        )}
+                      </div>
+                      <div className="pt-2">
+                        <h3 className="font-display font-bold text-xl text-ink">{p.title}</h3>
+                        <p className="mt-1.5 text-muted-foreground">{p.desc}</p>
+                      </div>
+                    </div>
+                  </FadeUp>
+                ))}
+              </div>
+
+              <FadeUp delay={0.8}>
+                <Link
+                  to="/services"
+                  className="mt-10 inline-flex items-center gap-2 bg-ink text-on-ink px-7 h-13 rounded-full font-semibold hover:bg-ink/90 transition-all shadow-premium-lg group"
+                >
+                  Explore our services
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </FadeUp>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section id="contact" className="relative overflow-hidden bg-ink text-on-ink">
-        <div className="absolute inset-0 -z-0">
-          <div className="absolute -bottom-20 -left-10 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
-          <div className="absolute -top-20 -right-10 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-        </div>
-        <div className="relative mx-auto max-w-4xl px-6 py-24 text-center">
-          <p className="text-xs tracking-[0.3em] uppercase text-primary font-bold">Let's talk</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-extrabold">
-            Show me how AI fits my business.
-          </h2>
-          <p className="mt-4 text-on-ink/70 max-w-xl mx-auto">
-            No hard pitch — we map what to automate first, then show you the highest-leverage moves.
-          </p>
-          <a
-            href="https://wa.me/916000683808"
-            className="mt-8 inline-flex items-center gap-2 bg-primary text-ink px-8 h-14 rounded-md font-semibold text-lg"
-          >
-            Book a Demo <ArrowRight className="h-5 w-5" />
-          </a>
+      {/* ─────────── WHY CHOOSE ─────────── */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 bg-ink pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-primary/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-primary/5 rounded-full blur-[100px]" />
+
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            {/* Left - Image */}
+            <FadeUp className="order-2 lg:order-1">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent rounded-[32px] blur-md" />
+                <div className="relative rounded-[24px] overflow-hidden shadow-premium-xl">
+                  <img
+                    src={whyChoose}
+                    alt="Why choose LTAB"
+                    loading="lazy"
+                    width={1024}
+                    height={1024}
+                    className="w-full aspect-[5/4] object-cover"
+                  />
+                  <div className="absolute inset-0 rounded-[24px] ring-1 ring-white/10" />
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Right - Content */}
+            <div className="order-1 lg:order-2">
+              <FadeUp>
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.15em] uppercase text-primary bg-primary/10 px-4 py-1.5 rounded-full">
+                  <Sparkles className="h-3 w-3" />
+                  Why Choose Us
+                </span>
+              </FadeUp>
+
+              <FadeUp delay={0.15}>
+                <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-on-ink leading-tight">
+                  The LTAB <span className="text-gradient">advantage.</span>
+                </h2>
+              </FadeUp>
+
+              <FadeUp delay={0.3}>
+                <p className="mt-4 text-on-ink/60 max-w-lg">
+                  We don't just deliver content — we install a growth engine that compounds while
+                  you sleep.
+                </p>
+              </FadeUp>
+
+              <div className="mt-10 grid sm:grid-cols-2 gap-4">
+                {benefits.map((b, i) => (
+                  <FadeUp key={b.title} delay={0.35 + i * 0.1}>
+                    <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-5 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                      <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center mb-3">
+                        <b.icon className="h-5 w-5 text-primary" />
+                      </div>
+                      <h3 className="font-display font-bold text-on-ink">{b.title}</h3>
+                      <p className="mt-1.5 text-sm text-on-ink/50">{b.desc}</p>
+                    </div>
+                  </FadeUp>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-background border-t border-border">
-        <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2 font-display font-extrabold text-ink">
-            <span className="inline-block h-6 w-6 rounded-md bg-primary grid place-items-center">
-              <Sparkles className="h-3 w-3 text-ink" />
-            </span>
-            LTAB<span className="text-primary">.</span>AI
-          </div>
-          <div>© {new Date().getFullYear()} LTAB AI. All rights reserved.</div>
-          <div className="flex gap-4">
-            <a href="#" className="hover:text-ink">Privacy</a>
-            <a href="#" className="hover:text-ink">Terms</a>
-            <a href="https://wa.me/916000683808" className="hover:text-ink">WhatsApp</a>
-          </div>
+      {/* ─────────── TESTIMONIALS ─────────── */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 gradient-section pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+        <div className="relative mx-auto max-w-7xl px-6">
+          <FadeUp className="text-center max-w-xl mx-auto">
+            <SectionTag>Testimonials</SectionTag>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-ink leading-tight">
+              Trusted by industry leaders
+            </h2>
+          </FadeUp>
+
+          <StaggerFade className="mt-14 grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {testimonials.map((t) => (
+              <StaggerItem key={t.name}>
+                <div className="relative bg-white rounded-3xl p-8 shadow-card border border-[#f0ede6]">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                    ))}
+                  </div>
+                  <p className="text-ink/80 leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
+                  <div className="mt-6 pt-4 border-t border-[#f0ede6]">
+                    <p className="font-semibold text-ink text-sm">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.company}</p>
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerFade>
         </div>
-      </footer>
-    </div>
+      </section>
+
+      {/* ─────────── CTA ─────────── */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 bg-ink pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-80 bg-primary/15 rounded-full blur-[120px]" />
+
+        <div className="relative mx-auto max-w-4xl px-6 text-center">
+          <FadeUp>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.15em] uppercase text-primary bg-primary/10 px-4 py-1.5 rounded-full">
+              <MessageCircle className="h-3 w-3" />
+              Let's Talk Growth
+            </span>
+          </FadeUp>
+
+          <FadeUp delay={0.15}>
+            <h2 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-extrabold text-on-ink leading-tight text-glow">
+              Show me how AI
+              <br />
+              <span className="text-gradient">fits my business.</span>
+            </h2>
+          </FadeUp>
+
+          <FadeUp delay={0.3}>
+            <p className="mt-4 text-on-ink/60 max-w-lg mx-auto">
+              No hard pitch — we map what to automate first, then show you the highest-leverage
+              moves for your specific business.
+            </p>
+          </FadeUp>
+
+          <FadeUp delay={0.45}>
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <a
+                href="https://wa.me/916000683808"
+                className="group relative inline-flex items-center gap-2 bg-primary text-ink px-10 h-15 rounded-full font-bold text-lg hover:brightness-95 transition-all glow-orange"
+              >
+                Book a Free Demo
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </a>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 bg-white/10 text-on-ink backdrop-blur-sm border border-white/20 px-8 h-15 rounded-full font-semibold text-base hover:bg-white/15 transition-all"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Talk to us
+              </Link>
+            </div>
+          </FadeUp>
+
+          <FadeUp delay={0.6}>
+            <p className="mt-8 text-xs text-on-ink/40">
+              Free 15-minute consultation. No commitment required.
+            </p>
+          </FadeUp>
+        </div>
+      </section>
+    </>
   );
 }
